@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(pageTitle, activeMenu, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} ?: 'Birthday Notification'">Birthday Notification</title>
+    <link th:href="@{/bootstrap-4.0.0-dist/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="d-flex min-vh-100">
+    <aside th:replace="~{common/sidebar :: sidebar(activeMenu=${activeMenu})}"></aside>
+
+    <div class="flex-grow-1 d-flex flex-column">
+        <header th:replace="~{common/header :: header(pageTitle=${pageTitle})}"></header>
+
+        <main class="flex-grow-1 p-4">
+            <div th:if="${content != null}" th:replace="${content}"></div>
+            <div th:if="${content == null}" class="text-muted">
+                Nội dung trang sẽ được đặt tại đây.
+            </div>
+        </main>
+
+        <footer th:replace="~{common/footer :: footer}"></footer>
+    </div>
+</div>
+
+<script th:src="@{/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
