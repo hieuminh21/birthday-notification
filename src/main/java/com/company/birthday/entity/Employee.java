@@ -17,49 +17,49 @@ import org.hibernate.annotations.Check;
 
 @Entity
 @Table(
-        name = "Employee",
+        name = "employee",
         indexes = {
-                @Index(name = "idx_employee_birthday", columnList = "BirthMonth, BirthDay")
+                @Index(name = "idx_employee_birthday", columnList = "birthmonth, birthday")
         }
 )
-@Check(constraints = "BirthDay BETWEEN 1 AND 31")
-@Check(constraints = "BirthMonth BETWEEN 1 AND 12")
+@Check(constraints = "birthday BETWEEN 1 AND 31")
+@Check(constraints = "birthmonth BETWEEN 1 AND 12")
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EmployeeID")
+    @Column(name = "employeeid")
     private Integer employeeId;
 
-    @Column(name = "EmployeeCode", nullable = false, unique = true, length = 50)
+    @Column(name = "employeecode", nullable = false, unique = true, length = 50)
     private String employeeCode;
 
-    @Column(name = "FullName", nullable = false, length = 255)
+    @Column(name = "fullname", nullable = false, length = 255)
     private String fullName;
 
-    @Column(name = "JobTitle", length = 255)
+    @Column(name = "jobtitle", length = 255)
     private String jobTitle;
 
-    @Column(name = "PhoneNumber", length = 20)
+    @Column(name = "phonenumber", length = 20)
     private String phoneNumber;
 
-    @Column(name = "Email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "DateOfBirth", nullable = false)
+    @Column(name = "dateofbirth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(name = "BirthDay", nullable = false)
+    @Column(name = "birthday", nullable = false)
     private Integer birthDay;
 
-    @Column(name = "BirthMonth", nullable = false)
+    @Column(name = "birthmonth", nullable = false)
     private Integer birthMonth;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DepartmentID", nullable = false)
+    @JoinColumn(name = "departmentid", nullable = false)
     private Department department;
 
-    @Column(name = "IsActive", nullable = false)
+    @Column(name = "isactive", nullable = false)
     private Boolean isActive = true;
 
     @PrePersist

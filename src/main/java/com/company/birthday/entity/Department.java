@@ -11,18 +11,18 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Department")
+@Table(name = "department")
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DepartmentID")
+    @Column(name = "departmentid")
     private Integer departmentId;
 
-    @Column(name = "DepartmentCode", nullable = false, unique = true, length = 50)
+    @Column(name = "departmentcode", nullable = false, unique = true, length = 50)
     private String departmentCode;
 
-    @Column(name = "DepartmentName", nullable = false, length = 255)
+    @Column(name = "departmentname", nullable = false, length = 255)
     private String departmentName;
 
     @OneToMany(mappedBy = "department")

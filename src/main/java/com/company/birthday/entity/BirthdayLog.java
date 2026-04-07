@@ -20,37 +20,37 @@ import org.hibernate.annotations.Check;
 
 @Entity
 @Table(
-        name = "BirthdayLog",
+        name = "birthdaylog",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uq_employee_date", columnNames = {"EmployeeID", "SentDate"})
+                @UniqueConstraint(name = "uq_employee_date", columnNames = {"employeeid", "sentdate"})
         },
         indexes = {
-                @Index(name = "idx_log_employee_date", columnList = "EmployeeID, SentDate")
+                @Index(name = "idx_log_employee_date", columnList = "employeeid, sentdate")
         }
 )
-@Check(constraints = "Status IN ('SUCCESS', 'FAILED')")
+@Check(constraints = "status IN ('SUCCESS', 'FAILED')")
 public class BirthdayLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "LogID")
+    @Column(name = "logid")
     private Long logId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "EmployeeID", nullable = false)
+    @JoinColumn(name = "employeeid", nullable = false)
     private Employee employee;
 
-    @Column(name = "SentDate", nullable = false)
+    @Column(name = "sentdate", nullable = false)
     private LocalDate sentDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     private LogStatus status;
 
-    @Column(name = "ErrorMessage", columnDefinition = "TEXT")
+    @Column(name = "errormessage", columnDefinition = "TEXT")
     private String errorMessage;
 
-    @Column(name = "CreatedAt", nullable = false)
+    @Column(name = "createdat", nullable = false)
     private OffsetDateTime createdAt;
 
     @PrePersist

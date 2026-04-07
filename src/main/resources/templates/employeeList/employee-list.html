@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/layout :: layout(pageTitle='Danh Sách Nhân Viên', activeMenu='employees', content=~{::content}, pageStyles=~{employeeList/assets :: pageStyles}, pageScripts=~{employeeList/assets :: pageScripts})}">
+<div th:fragment="content">
+    <div class="employee-page">
+        <div class="card border-0 shadow-sm employee-card">
+            <div class="card-body p-0">
+                <div class="d-flex flex-wrap align-items-center justify-content-between employee-toolbar">
+                    <div>
+                        <h2 class="h5 mb-1 text-dark">Danh Sách Nhân Viên</h2>
+                        <p class="text-muted mb-0">Thông tin nhân viên theo phòng ban.</p>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm px-3">Thêm Nhân Viên</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 employee-table">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Phòng</th>
+                            <th>Chức danh</th>
+                            <th>Mã nhân viên</th>
+                            <th>Họ và tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Số đt</th>
+                            <th>Email</th>
+                            <th class="text-center">Logo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="employee : ${employees}">
+                            <td th:text="${employee.index}">1</td>
+                            <td th:text="${employee.department}">CNTT</td>
+                            <td th:text="${employee.title}">Lap trinh vien</td>
+                            <td th:text="${employee.employeeCode}">EMP001</td>
+                            <td class="font-weight-bold" th:text="${employee.fullName}">Nguyen Van A</td>
+                            <td th:text="${employee.birthday}">15/01/1996</td>
+                            <td th:text="${employee.phone}">0901234567</td>
+                            <td th:text="${employee.email}">abc@company.vn</td>
+                            <td>
+                                <div class="d-flex justify-content-center action-wrap">
+                                    <a href="#" class="action-btn edit-btn" title="Edit" aria-label="Edit">
+                                        <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                                            <path d="M3 17.25V21h3.75L17.8 9.95l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="action-btn delete-btn" title="Delete" aria-label="Delete">
+                                        <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                                            <path d="M6 7h12l-1 14H7L6 7zm9-3 1 2H8l1-2h6z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(employees)}">
+                            <td colspan="9" class="text-center text-muted py-4">Khong co du lieu nhan vien.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div th:replace="~{common/pagination :: pager(pagination=${pagination}, baseUrl=${baseUrl})}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

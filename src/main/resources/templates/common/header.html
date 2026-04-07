@@ -1,10 +1,6 @@
 <div xmlns:th="http://www.thymeleaf.org"
      th:fragment="header(pageTitle)"
-     class="bg-white border-bottom px-4 py-3">
-    <div class="d-flex align-items-center justify-content-between gap-3">
-        <div>
-            <p class="text-uppercase text-muted small mb-1">Birthday Notification</p>
-            <h1 class="h4 mb-0 fw-bold text-dark" th:text="${pageTitle} ?: 'Trang chủ'">Trang chủ</h1>
-        </div>
-    </div>
+     class="app-header bg-white border-bottom px-4 py-3">
+    <p class="text-uppercase text-muted small mb-1">Birthday Notification</p>
+    <h1 class="h4 mb-0 text-dark" th:text="${pageTitle} ?: 'Trang chu'">Trang chu</h1>
 </div>

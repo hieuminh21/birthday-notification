@@ -1,0 +1,151 @@
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body.app-body {
+    margin: 0;
+    overflow-x: hidden;
+    background: #f3f4f8;
+    color: #1f2940;
+}
+
+.app-shell {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+.app-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-header,
+.app-content,
+.app-footer {
+    width: 100%;
+}
+
+.app-header,
+.app-footer {
+    min-height: 64px;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.app-content {
+    flex: 1 1 auto;
+    background: #f3f4f8;
+}
+
+.app-footer {
+    flex-shrink: 0;
+}
+
+.app-sidebar {
+    width: 280px;
+    min-height: 100vh;
+    transition: width 0.25s ease;
+}
+
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #34c38f;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-right: 12px;
+}
+
+.brand-name {
+    font-size: 1.9rem;
+    color: #1f2940;
+    line-height: 1;
+}
+
+.sidebar-toggle-btn {
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    color: #6f7788;
+}
+
+.sidebar-section {
+    list-style: none;
+    color: #9aa0ad;
+    font-size: 0.82rem;
+    letter-spacing: 0.08rem;
+    margin: 12px 0;
+    font-weight: 600;
+}
+
+.sidebar-link {
+    border-radius: 12px;
+    color: #25304a;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.sidebar-link:hover {
+    color: #25304a;
+    background: #f3f5f9;
+}
+
+.sidebar-link.active {
+    color: #1a925f;
+    background: #dff2ea;
+}
+
+.nav-icon {
+    width: 34px;
+    height: 34px;
+    border: 2px solid #8890a2;
+    border-radius: 10px;
+    color: #8890a2;
+    font-size: 0.86rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.sidebar-link.active .nav-icon {
+    border-color: #1aaf72;
+    color: #1aaf72;
+}
+
+#appShell.sidebar-collapsed .app-sidebar {
+    width: 104px;
+}
+
+#appShell.sidebar-collapsed .brand-name,
+#appShell.sidebar-collapsed .sidebar-label,
+#appShell.sidebar-collapsed .sidebar-section {
+    display: none;
+}
+
+#appShell.sidebar-collapsed .sidebar-link {
+    justify-content: center;
+}
+
+#appShell.sidebar-collapsed .nav-icon {
+    margin-right: 0;
+}
+
+
+
+
