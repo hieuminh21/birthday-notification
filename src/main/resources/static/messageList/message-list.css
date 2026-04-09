@@ -1,28 +1,28 @@
-.employee-page {
+.message-page {
     background: linear-gradient(180deg, #f4f7fc 0%, #eef3fb 100%);
     border-radius: 18px;
     padding: 16px;
 }
 
-.employee-card {
+.message-card {
     border-radius: 16px;
     overflow: hidden;
     background: #ffffff;
 }
 
-.employee-toolbar {
+.message-toolbar {
     padding: 20px 24px;
     border-bottom: 1px solid #e7edf6;
     background: #ffffff;
 }
 
-.employee-toolbar .btn-primary {
+.message-toolbar .btn-primary {
     background: #2f67ff;
     border-color: #2f67ff;
     border-radius: 10px;
 }
 
-.employee-table thead th {
+.message-table thead th {
     border-top: 0;
     border-bottom: 1px solid #e7edf6;
     font-size: 0.87rem;
@@ -32,16 +32,21 @@
     white-space: nowrap;
 }
 
-.employee-table tbody td {
+.message-table tbody td {
     border-top: 1px solid #eef2f8;
     font-size: 0.92rem;
     color: #22314c;
-    vertical-align: middle;
-    white-space: nowrap;
+    vertical-align: top;
 }
 
-.employee-table tbody tr:hover {
+.message-table tbody tr:hover {
     background: #f8fbff;
+}
+
+.message-content {
+    white-space: pre-line;
+    min-width: 360px;
+    max-width: 640px;
 }
 
 .action-wrap {
@@ -76,42 +81,36 @@
     background: #dbe6ff;
 }
 
-.delete-btn {
-    color: #dc3545;
-    background: #fdecef;
-}
-
-.delete-btn:hover {
-    color: #b62032;
-    background: #fbd8dd;
-}
-
-.employee-modal {
+.message-modal {
     border: 0;
     border-radius: 14px;
     overflow: hidden;
 }
 
-.employee-modal .modal-header {
+.message-modal .modal-header {
     border-bottom: 1px solid #edf2fa;
 }
 
-.employee-modal .modal-footer {
+.message-modal .modal-footer {
     border-top: 1px solid #edf2fa;
 }
 
-.employee-modal .form-control {
+.message-modal .form-control {
     border-radius: 9px;
 }
 
-.employee-modal .btn-primary {
+.message-modal .btn-primary {
     background: #2f67ff;
     border-color: #2f67ff;
 }
 
-.employee-modal .btn-light {
+.message-modal .btn-light {
     border: 1px solid #d8e0ed;
     background: #ffffff;
+}
+
+.message-content-input {
+    white-space: pre-wrap;
 }
 
 .form-error {
@@ -122,12 +121,13 @@
 }
 
 @media (max-width: 992px) {
-    .employee-page {
+    .message-page {
         padding: 12px;
     }
 
-    .employee-toolbar {
+    .message-toolbar {
         gap: 12px;
         padding: 16px;
     }
 }
+

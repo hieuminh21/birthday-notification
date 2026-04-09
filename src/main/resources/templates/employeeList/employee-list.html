@@ -10,7 +10,7 @@
                         <h2 class="h5 mb-1 text-dark">Danh Sách Nhân Viên</h2>
                         <p class="text-muted mb-0">Thông tin nhân viên theo phòng ban.</p>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm px-3">Thêm Nhân Viên</button>
+                    <button id="openCreateEmployeeModal" type="button" class="btn btn-primary btn-sm px-3">Thêm Nhân Viên</button>
                 </div>
 
                 <div class="table-responsive">
@@ -25,7 +25,7 @@
                             <th>Ngày sinh</th>
                             <th>Số đt</th>
                             <th>Email</th>
-                            <th class="text-center">Logo</th>
+                            <th class="text-center">*</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -35,12 +35,23 @@
                             <td th:text="${employee.title}">Lap trinh vien</td>
                             <td th:text="${employee.employeeCode}">EMP001</td>
                             <td class="font-weight-bold" th:text="${employee.fullName}">Nguyen Van A</td>
-                            <td th:text="${employee.birthday}">15/01/1996</td>
+                            <td th:text="${employee.dateOfBirth != null ? #temporals.format(employee.dateOfBirth, 'dd/MM/yyyy') : ''}">15/01/1996</td>
                             <td th:text="${employee.phone}">0901234567</td>
                             <td th:text="${employee.email}">abc@company.vn</td>
                             <td>
                                 <div class="d-flex justify-content-center action-wrap">
-                                    <a href="#" class="action-btn edit-btn" title="Edit" aria-label="Edit">
+                                    <a href="#"
+                                       class="action-btn edit-btn js-edit-employee"
+                                       title="Edit"
+                                       aria-label="Edit"
+                                       th:attr="data-employee-id=${employee.employeeId},
+                                                data-department-id=${employee.departmentId},
+                                                data-job-title=${employee.title},
+                                                data-employee-code=${employee.employeeCode},
+                                                data-full-name=${employee.fullName},
+                                                data-date-of-birth=${employee.dateOfBirth},
+                                                data-phone-number=${employee.phone},
+                                                data-email=${employee.email}">
                                         <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
                                             <path d="M3 17.25V21h3.75L17.8 9.95l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0l-1.96 1.96 3.75 3.75 2.13-1.79z"/>
                                         </svg>
@@ -54,7 +65,7 @@
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(employees)}">
-                            <td colspan="9" class="text-center text-muted py-4">Khong co du lieu nhan vien.</td>
+                            <td colspan="9" class="text-center text-muted py-4">Không có dữ liệu Nhân viên.</td>
                         </tr>
                         </tbody>
                     </table>
@@ -63,6 +74,90 @@
                 <div th:replace="~{common/pagination :: pager(pagination=${pagination}, baseUrl=${baseUrl})}"></div>
             </div>
         </div>
+
+<!--        Modal Create/Edit-->
+        <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content employee-modal">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="employeeModalTitle"
+                            th:text="${modalMode != null and modalMode.name() == 'UPDATE'} ? 'Cap Nhat Nhan Vien' : 'Them Nhan Vien'">Thêm Nhân Viên</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="employeeForm"
+                          th:object="${employeeForm}"
+                          th:action="${employeeFormAction}"
+                          method="post"
+                          novalidate>
+                        <div class="modal-body">
+                            <div class="alert alert-danger mb-3" th:if="${#fields.hasGlobalErrors()}">
+                                <p class="mb-0" th:each="error : ${#fields.globalErrors()}" th:text="${error}">Có lỗi.</p>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="departmentId">Phòng</label>
+                                    <select id="departmentId" class="form-control" th:field="*{departmentId}">
+                                        <option value="">Chọn Phòng ban</option>
+                                        <option th:each="department : ${departments}"
+                                                th:value="${department.departmentId}"
+                                                th:text="${department.departmentName}">Phong CNTT</option>
+                                    </select>
+                                    <small class="form-error" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></small>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="jobTitle">Chức danh</label>
+                                    <input id="jobTitle" type="text" class="form-control" th:field="*{jobTitle}">
+                                    <small class="form-error" th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}"></small>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="employeeCode">Mã Nhân viên</label>
+                                    <input id="employeeCode" type="text" class="form-control" th:field="*{employeeCode}">
+                                    <small class="form-error" th:if="${#fields.hasErrors('employeeCode')}" th:errors="*{employeeCode}"></small>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fullName">Họ và tên</label>
+                                    <input id="fullName" type="text" class="form-control" th:field="*{fullName}">
+                                    <small class="form-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></small>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="dateOfBirth">Ngày sinh</label>
+                                    <input id="dateOfBirth" type="date" class="form-control" th:field="*{dateOfBirth}">
+                                    <small class="form-error" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></small>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="phoneNumber">Số Đt</label>
+                                    <input id="phoneNumber" type="text" class="form-control" th:field="*{phoneNumber}">
+                                    <small class="form-error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></small>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <label for="email">Email</label>
+                                <input id="email" type="email" class="form-control" th:field="*{email}">
+                                <small class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Hủy</button>
+                            <button id="employeeSubmitBtn" type="submit" class="btn btn-primary"
+                                    th:text="${modalMode != null and modalMode.name() == 'UPDATE'} ? 'Cap nhat' : 'Them moi'">Thêm mới</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="employeeModalState"
+             th:attr="data-open-modal=${openEmployeeModal},data-modal-mode=${modalMode != null ? #strings.toLowerCase(modalMode.name()) : 'create'},data-form-action=${employeeFormAction}"></div>
     </div>
 </div>
 </html>

@@ -1,61 +1,70 @@
 <nav xmlns:th="http://www.thymeleaf.org"
      th:fragment="sidebar(activeMenu)"
-     class="sidebar bg-dark text-white py-3 px-3 d-flex flex-column"
-     style="width: 260px; min-height: 100vh;">
-    <style>
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-        }
+     class="app-sidebar bg-white border-right d-flex flex-column">
+    <div class="p-4 h-100 d-flex flex-column">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <span class="brand-mark">C</span>
+                <strong class="brand-name">Company</strong>
+            </div>
+            <button id="sidebarToggle" type="button" class="btn btn-sm btn-light border sidebar-toggle-btn"
+                    aria-label="Toggle sidebar">
+                <span class="sidebar-toggle-icon">&#9776;</span>
+            </button>
+        </div>
 
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.12);
-        }
-    </style>
+        <ul class="nav flex-column sidebar-nav mb-auto">
+            <li class="sidebar-section">DASHBOARD</li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'dashboard' ? ' active' : ''"
+                   th:href="@{/}">
+                    <span class="nav-icon">D</span>
+                    <span class="sidebar-label">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'employees' ? ' active' : ''"
+                   th:href="@{/employees}">
+                    <span class="nav-icon">AX</span>
+                    <span class="sidebar-label">Danh Sách Nhân Viên</span>
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'messages' ? ' active' : ''"
+                   th:href="@{/messages}">
+                    <span class="nav-icon">M</span>
+                    <span class="sidebar-label">Danh Sách Lời Chúc</span>
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'import' ? ' active' : ''"
+                   th:href="@{/employees/import}">
+                    <span class="nav-icon">I</span>
+                    <span class="sidebar-label">Nhap Excel</span>
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'templates' ? ' active' : ''"
+                   th:href="@{/templates}">
+                    <span class="nav-icon">M</span>
+                    <span class="sidebar-label">Mau email</span>
+                </a>
+            </li>
 
-    <div class="mb-4">
-        <div class="fw-bold fs-5 text-center">Birthday Notification</div>
-        <div class="text-center small text-white-50">Quản lý lời chúc sinh nhật</div>
+            <li class="sidebar-section">COMMUNICATION</li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'logs' ? ' active' : ''"
+                   th:href="@{/logs}">
+                    <span class="nav-icon">L</span>
+                    <span class="sidebar-label">Nhat ky gui</span>
+                </a>
+            </li>
+        </ul>
     </div>
-
-    <hr class="border-secondary">
-
-    <ul class="nav nav-pills flex-column gap-2">
-        <li class="nav-item">
-            <a class="nav-link rounded px-3 py-2"
-               th:classappend="${activeMenu} == 'dashboard' ? ' active' : ''"
-               th:href="@{/}">
-                Tổng quan
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link rounded px-3 py-2"
-               th:classappend="${activeMenu} == 'employees' ? ' active' : ''"
-               th:href="@{/employees}">
-                Nhân viên
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link rounded px-3 py-2"
-               th:classappend="${activeMenu} == 'import' ? ' active' : ''"
-               th:href="@{/employees/import}">
-                Nhập Excel
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link rounded px-3 py-2"
-               th:classappend="${activeMenu} == 'templates' ? ' active' : ''"
-               th:href="@{/templates}">
-                Mẫu email
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link rounded px-3 py-2"
-               th:classappend="${activeMenu} == 'logs' ? ' active' : ''"
-               th:href="@{/logs}">
-                Nhật ký gửi
-            </a>
-        </li>
-    </ul>
 </nav>
