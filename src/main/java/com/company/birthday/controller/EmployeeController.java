@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,11 @@ public class EmployeeController {
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/employees";
     }
 
     @GetMapping("/employees")
@@ -46,7 +52,8 @@ public class EmployeeController {
             @PageableDefault(sort = "employeeCode", direction = Sort.Direction.ASC) Pageable pageable,
             @Valid @ModelAttribute("employeeForm") EmployeeFormRequest employeeForm,
             BindingResult bindingResult,
-            Model model
+            Model model,
+            RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
             return handleFormError(model, pageable, ModalMode.CREATE, "/employees");
@@ -54,6 +61,7 @@ public class EmployeeController {
 
         try {
             employeeService.createEmployee(employeeForm);
+            redirectAttributes.addFlashAttribute("successMessage", "Thêm nhân viên thành công.");
             return "redirect:/employees";
         } catch (DuplicateFieldException ex) {
             bindingResult.rejectValue(ex.getFieldName(), "", ex.getMessage());
@@ -70,7 +78,8 @@ public class EmployeeController {
             @PageableDefault(sort = "employeeCode", direction = Sort.Direction.ASC) Pageable pageable,
             @Valid @ModelAttribute("employeeForm") EmployeeFormRequest employeeForm,
             BindingResult bindingResult,
-            Model model
+            Model model,
+            RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
             return handleFormError(model, pageable, ModalMode.UPDATE, "/employees/" + employeeId);
@@ -78,6 +87,7 @@ public class EmployeeController {
 
         try {
             employeeService.updateEmployee(employeeId, employeeForm);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật nhân viên thành công.");
             return "redirect:/employees";
         } catch (DuplicateFieldException ex) {
             bindingResult.rejectValue(ex.getFieldName(), "", ex.getMessage());
@@ -86,6 +96,24 @@ public class EmployeeController {
         }
 
         return handleFormError(model, pageable, ModalMode.UPDATE, "/employees/" + employeeId);
+    }
+
+    @PostMapping("/employees/{employeeId}/delete")
+    public String deleteEmployee(
+            @PathVariable Integer employeeId,
+            Pageable pageable,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            employeeService.deleteEmployee(employeeId);
+            redirectAttributes.addFlashAttribute("successMessage", "Xóa nhân viên thành công.");
+        } catch (EntityNotFoundException ignored) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Nhân viên không tồn tại hoặc đã bị xóa.");
+        }
+
+        redirectAttributes.addAttribute("page", Math.max(pageable.getPageNumber(), 0));
+        redirectAttributes.addAttribute("size", Math.max(pageable.getPageSize(), 1));
+        return "redirect:/employees";
     }
 
     private void loadEmployeePage(Model model, Pageable pageable) {

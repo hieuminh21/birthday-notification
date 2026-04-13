@@ -17,4 +17,6 @@ public interface EmployeeService {
 	EmployeeListResponse createEmployee(EmployeeFormRequest request);
 
 	EmployeeListResponse updateEmployee(Integer employeeId, EmployeeFormRequest request);
+
+	void deleteEmployee(Integer employeeId);
 }

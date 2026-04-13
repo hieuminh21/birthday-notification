@@ -66,6 +66,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.toListResponse(savedEmployee, 0);
 	}
 
+	@Override
+	public void deleteEmployee(Integer employeeId) {
+		Employee employee = employeeRepository.findById(employeeId)
+				.orElseThrow(() -> new EntityNotFoundException("Nhan vien khong ton tai."));
+		employeeRepository.delete(employee);
+	}
+
 	private void updateEntity(Employee employee, EmployeeFormRequest request) {
 		Department department = departmentRepository.findById(request.getDepartmentId())
 				.orElseThrow(() -> new EntityNotFoundException("Phong ban khong ton tai."));
