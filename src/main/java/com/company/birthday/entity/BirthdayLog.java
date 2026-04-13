@@ -13,22 +13,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import org.hibernate.annotations.Check;
 
 @Entity
-@Table(
-        name = "birthdaylog",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uq_employee_date", columnNames = {"employeeid", "sentdate"})
-        },
-        indexes = {
-                @Index(name = "idx_log_employee_date", columnList = "employeeid, sentdate")
-        }
-)
+@Table(name = "birthdaylog", indexes = {
+        @Index(name = "idx_log_employee_send_time", columnList = "employeeid, send_time")
+})
 @Check(constraints = "status IN ('SUCCESS', 'FAILED')")
+@Check(constraints = "channel IN ('EMAIL', 'WHATSAPP')")
 public class BirthdayLog {
 
     @Id
@@ -40,12 +33,19 @@ public class BirthdayLog {
     @JoinColumn(name = "employeeid", nullable = false)
     private Employee employee;
 
-    @Column(name = "sentdate", nullable = false)
-    private LocalDate sentDate;
+    @Column(name = "send_time", nullable = false)
+    private OffsetDateTime sendTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "channel", nullable = false, length = 20)
+    private Channel channel;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private LogStatus status;
+    private SendStatus status;
+
+    @Column(name = "message", columnDefinition = "TEXT")
+    private String message;
 
     @Column(name = "errormessage", columnDefinition = "TEXT")
     private String errorMessage;
@@ -76,20 +76,36 @@ public class BirthdayLog {
         this.employee = employee;
     }
 
-    public LocalDate getSentDate() {
-        return sentDate;
+    public OffsetDateTime getSendTime() {
+        return sendTime;
     }
 
-    public void setSentDate(LocalDate sentDate) {
-        this.sentDate = sentDate;
+    public void setSendTime(OffsetDateTime sendTime) {
+        this.sendTime = sendTime;
     }
 
-    public LogStatus getStatus() {
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
+    public SendStatus getStatus() {
         return status;
     }
 
-    public void setStatus(LogStatus status) {
+    public void setStatus(SendStatus status) {
         this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getErrorMessage() {
