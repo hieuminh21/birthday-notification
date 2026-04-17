@@ -2,8 +2,11 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="pageStyles">
     <title>test assets</title>
+    <link th:href="@{/employeeList/employee-list.css}" rel="stylesheet">
     <link th:href="@{/test/test.css}" rel="stylesheet">
 </head>
 
-<th:block th:fragment="pageScripts"></th:block>
+<th:block th:fragment="pageScripts">
+    <script th:src="@{/test/test.js}"></script>
+</th:block>
 </html>

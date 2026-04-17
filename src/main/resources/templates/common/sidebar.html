@@ -4,8 +4,8 @@
     <div class="p-4 h-100 d-flex flex-column">
         <div class="d-flex align-items-center justify-content-between mb-4">
             <div class="d-flex align-items-center">
-                <span class="brand-mark">C</span>
-                <strong class="brand-name">Company</strong>
+                <span class="brand-mark">X</span>
+                <strong class="brand-name">Noti</strong>
             </div>
             <button id="sidebarToggle" type="button" class="btn btn-sm btn-light border sidebar-toggle-btn"
                     aria-label="Toggle sidebar">
@@ -15,19 +15,19 @@
 
         <ul class="nav flex-column sidebar-nav mb-auto">
             <li class="sidebar-section">DASHBOARD</li>
-            <li class="nav-item mb-1">
-                <a class="nav-link sidebar-link"
-                   th:classappend="${activeMenu} == 'dashboard' ? ' active' : ''"
-                   th:href="@{/}">
-                    <span class="nav-icon">D</span>
-                    <span class="sidebar-label">Dashboard</span>
-                </a>
-            </li>
+<!--            <li class="nav-item mb-1">-->
+<!--                <a class="nav-link sidebar-link"-->
+<!--                   th:classappend="${activeMenu} == 'dashboard' ? ' active' : ''"-->
+<!--                   th:href="@{/}">-->
+<!--                    <span class="nav-icon">D</span>-->
+<!--                    <span class="sidebar-label">Dashboard</span>-->
+<!--                </a>-->
+<!--            </li>-->
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'employees' ? ' active' : ''"
                    th:href="@{/employees}">
-                    <span class="nav-icon">AX</span>
+                    <span class="nav-icon">E</span>
                     <span class="sidebar-label">Danh Sách Nhân Viên</span>
                 </a>
             </li>
@@ -41,20 +41,28 @@
             </li>
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'test' ? ' active' : ''"
+                   th:href="@{/test}">
+                    <span class="nav-icon">T</span>
+                    <span class="sidebar-label">Test Gửi Lời Chúc</span>
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'import' ? ' active' : ''"
                    th:href="@{/employees/import}">
-                    <span class="nav-icon">I</span>
-                    <span class="sidebar-label">Nhap Excel</span>
+                    <span class="nav-icon">S</span>
+                    <span class="sidebar-label">Setting</span>
                 </a>
             </li>
-            <li class="nav-item mb-3">
-                <a class="nav-link sidebar-link"
-                   th:classappend="${activeMenu} == 'templates' ? ' active' : ''"
-                   th:href="@{/templates}">
-                    <span class="nav-icon">M</span>
-                    <span class="sidebar-label">Mau email</span>
-                </a>
-            </li>
+<!--            <li class="nav-item mb-3">-->
+<!--                <a class="nav-link sidebar-link"-->
+<!--                   th:classappend="${activeMenu} == 'templates' ? ' active' : ''"-->
+<!--                   th:href="@{/templates}">-->
+<!--                    <span class="nav-icon">M</span>-->
+<!--                    <span class="sidebar-label">Mau email</span>-->
+<!--                </a>-->
+<!--            </li>-->
 
             <li class="sidebar-section">COMMUNICATION</li>
             <li class="nav-item mb-1">
@@ -62,7 +70,7 @@
                    th:classappend="${activeMenu} == 'logs' ? ' active' : ''"
                    th:href="@{/logs}">
                     <span class="nav-icon">L</span>
-                    <span class="sidebar-label">Nhat ky gui</span>
+                    <span class="sidebar-label">Nhật ký gửi</span>
                 </a>
             </li>
         </ul>
