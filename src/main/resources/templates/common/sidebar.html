@@ -14,15 +14,8 @@
         </div>
 
         <ul class="nav flex-column sidebar-nav mb-auto">
-            <li class="sidebar-section">DASHBOARD</li>
-<!--            <li class="nav-item mb-1">-->
-<!--                <a class="nav-link sidebar-link"-->
-<!--                   th:classappend="${activeMenu} == 'dashboard' ? ' active' : ''"-->
-<!--                   th:href="@{/}">-->
-<!--                    <span class="nav-icon">D</span>-->
-<!--                    <span class="sidebar-label">Dashboard</span>-->
-<!--                </a>-->
-<!--            </li>-->
+            <li class="sidebar-section">Danh sách</li>
+
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'employees' ? ' active' : ''"
@@ -31,6 +24,7 @@
                     <span class="sidebar-label">Danh Sách Nhân Viên</span>
                 </a>
             </li>
+
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'messages' ? ' active' : ''"
@@ -39,6 +33,9 @@
                     <span class="sidebar-label">Danh Sách Lời Chúc</span>
                 </a>
             </li>
+
+            <li class="sidebar-section">Quản lý</li>
+
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'test' ? ' active' : ''"
@@ -47,24 +44,7 @@
                     <span class="sidebar-label">Test Gửi Lời Chúc</span>
                 </a>
             </li>
-            <li class="nav-item mb-1">
-                <a class="nav-link sidebar-link"
-                   th:classappend="${activeMenu} == 'import' ? ' active' : ''"
-                   th:href="@{/employees/import}">
-                    <span class="nav-icon">S</span>
-                    <span class="sidebar-label">Setting</span>
-                </a>
-            </li>
-<!--            <li class="nav-item mb-3">-->
-<!--                <a class="nav-link sidebar-link"-->
-<!--                   th:classappend="${activeMenu} == 'templates' ? ' active' : ''"-->
-<!--                   th:href="@{/templates}">-->
-<!--                    <span class="nav-icon">M</span>-->
-<!--                    <span class="sidebar-label">Mau email</span>-->
-<!--                </a>-->
-<!--            </li>-->
 
-            <li class="sidebar-section">COMMUNICATION</li>
             <li class="nav-item mb-1">
                 <a class="nav-link sidebar-link"
                    th:classappend="${activeMenu} == 'logs' ? ' active' : ''"
@@ -73,6 +53,18 @@
                     <span class="sidebar-label">Nhật ký gửi</span>
                 </a>
             </li>
+
+            <li class="sidebar-section">Cài đặt</li>
+
+            <li class="nav-item mb-1">
+                <a class="nav-link sidebar-link"
+                   th:classappend="${activeMenu} == 'settings' ? ' active' : ''"
+                   th:href="@{/settings}">
+                    <span class="nav-icon">S</span>
+                    <span class="sidebar-label">Cài đặt</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </nav>
