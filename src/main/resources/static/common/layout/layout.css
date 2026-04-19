@@ -39,6 +39,18 @@ body.app-body {
     padding-bottom: 1rem !important;
 }
 
+.user-menu-btn {
+    border-radius: 10px;
+    padding: 0.45rem 0.9rem;
+}
+
+.user-menu-dropdown {
+    min-width: 230px;
+    border: 1px solid #e6e8ef;
+    box-shadow: 0 12px 30px rgba(31, 41, 64, 0.12);
+    border-radius: 10px;
+}
+
 .app-content {
     flex: 1 1 auto;
     background: #f3f4f8;

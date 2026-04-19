@@ -19,7 +19,7 @@ public class BirthdayScheduler {
         this.messageTemplateId = messageTemplateId;
     }
 
-    @Scheduled(cron = "0 23 8 * * ?", zone = "Asia/Ho_Chi_Minh")
+    @Scheduled(cron = "0 40 19 * * ?", zone = "Asia/Ho_Chi_Minh")
     public void sendBirthdayMessageDaily() {
         birthdayService.handleTodayBirthday(messageTemplateId);
     }

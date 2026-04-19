@@ -92,6 +92,12 @@
             <version>11.3.5</version>
             <scope>compile</scope>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>it.auties</groupId>-->
+<!--            <artifactId>whatsapp-web4j</artifactId>-->
+<!--            <version>3.5.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
