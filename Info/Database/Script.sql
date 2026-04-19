@@ -141,3 +141,15 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 UPDATE users
 SET password = crypt('admin', gen_salt('bf'))
 WHERE username = 'admin';
+
+CREATE TABLE system_config (
+                               id SERIAL PRIMARY KEY,
+                               config_key VARCHAR(100) UNIQUE NOT NULL,
+                               config_value VARCHAR(100) NOT NULL,
+                               description TEXT
+);
+
+INSERT INTO system_config(config_key, config_value, description) VALUES
+                                                                     ('BIRTHDAY_ENABLED', 'true', 'Bật/tắt gửi sinh nhật'),
+                                                                     ('BIRTHDAY_HOUR', '8', 'Giờ gửi sinh nhật'),
+                                                                     ('BIRTHDAY_MINUTE', '0', 'Phút gửi sinh nhật');

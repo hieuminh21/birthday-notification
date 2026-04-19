@@ -2,16 +2,35 @@
     var enabledInput = document.getElementById('settingEnabled');
     var timeInput = document.getElementById('settingTime');
     var saveButton = document.getElementById('saveSettingBtn');
-    var alertBox = document.querySelector('.js-setting-alert');
+    var toastElement = document.querySelector('.js-setting-toast');
+    var toastTitle = document.querySelector('.js-setting-toast-title');
+    var toastBody = document.querySelector('.js-setting-toast-body');
+    var toastCloseButton = document.querySelector('.js-setting-toast-close');
+    var toastTimer = null;
 
-    if (!enabledInput || !timeInput || !saveButton || !alertBox) {
+    if (!enabledInput || !timeInput || !saveButton || !toastElement || !toastBody || !toastTitle) {
         return;
     }
 
+    function hideToast() {
+        toastElement.classList.remove('show');
+    }
+
     function showMessage(message, isError) {
-        alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
-        alertBox.classList.add(isError ? 'alert-danger' : 'alert-success');
-        alertBox.textContent = message;
+        if (toastTimer) {
+            window.clearTimeout(toastTimer);
+        }
+
+        toastElement.classList.remove('toast-success', 'toast-error');
+        toastElement.classList.add(isError ? 'toast-error' : 'toast-success');
+        toastTitle.textContent = isError ? 'Có lỗi' : 'Thành công';
+        toastBody.textContent = message;
+        toastElement.classList.add('show');
+
+        var delay = parseInt(toastElement.getAttribute('data-toast-delay') || '3500', 10);
+        toastTimer = window.setTimeout(function () {
+            hideToast();
+        }, delay);
     }
 
     function parseTime(value) {
@@ -37,7 +56,7 @@
 
     function setLoading(isLoading) {
         saveButton.disabled = isLoading;
-        saveButton.textContent = isLoading ? 'Saving...' : 'Save';
+        saveButton.textContent = isLoading ? 'Đang lưu...' : 'Lưu';
     }
 
     function loadConfig() {
@@ -50,7 +69,7 @@
         })
             .then(function (response) {
                 if (!response.ok) {
-                    throw new Error('Khong the tai cau hinh hien tai');
+                    throw new Error('Không thể tải cấu hình hiện tại');
                 }
                 return response.json();
             })
@@ -59,7 +78,7 @@
                 timeInput.value = formatTime(data.hour, data.minute);
             })
             .catch(function (error) {
-                showMessage(error.message || 'Khong the tai cau hinh', true);
+                showMessage(error.message || 'Không thể tải cấu hình', true);
             })
             .finally(function () {
                 setLoading(false);
@@ -69,7 +88,7 @@
     saveButton.addEventListener('click', function () {
         var time = parseTime(timeInput.value);
         if (!time) {
-            showMessage('Vui long nhap thoi gian hop le', true);
+            showMessage('Vui lòng nhập thời gian hợp lệ', true);
             return;
         }
 
@@ -88,22 +107,28 @@
         })
             .then(function (response) {
                 if (!response.ok) {
-                    throw new Error('Luu cau hinh that bai');
+                    throw new Error('Lưu cấu hình thất bại');
                 }
                 return response.json();
             })
             .then(function (data) {
                 enabledInput.checked = !!data.enabled;
                 timeInput.value = formatTime(data.hour, data.minute);
-                showMessage('Luu cau hinh thanh cong', false);
+                showMessage('Lưu cấu hình thành công', false);
             })
             .catch(function (error) {
-                showMessage(error.message || 'Luu cau hinh that bai', true);
+                showMessage(error.message || 'Lưu cấu hình thất bại', true);
             })
             .finally(function () {
                 setLoading(false);
             });
     });
+
+    if (toastCloseButton) {
+        toastCloseButton.addEventListener('click', function () {
+            hideToast();
+        });
+    }
 
     loadConfig();
 })();
