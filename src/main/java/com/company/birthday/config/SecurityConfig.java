@@ -29,7 +29,8 @@ public class SecurityConfig {
                                 "/employeeList/**",
                                 "/logList/**",
                                 "/messageList/**",
-                                "/test/**"
+                                "/test/**",
+                                "/setting/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
