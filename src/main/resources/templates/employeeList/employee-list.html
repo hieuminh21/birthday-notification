@@ -10,7 +10,10 @@
                         <h2 class="h5 mb-1 text-dark">Danh Sách Nhân Viên</h2>
                         <p class="text-muted mb-0">Thông tin nhân viên theo phòng ban.</p>
                     </div>
-                    <button id="openCreateEmployeeModal" type="button" class="btn btn-primary btn-sm px-3">Thêm Nhân Viên</button>
+                    <div class="d-flex flex-wrap align-items-center employee-actions">
+                        <button id="openImportEmployeeModal" type="button" class="btn btn-outline-primary btn-sm px-3 mr-2">Thêm danh sách nhân viên</button>
+                        <button id="openCreateEmployeeModal" type="button" class="btn btn-primary btn-sm px-3">Thêm Nhân Viên</button>
+                    </div>
                 </div>
 
                 <div class="employee-toast-container" th:if="${successMessage != null or errorMessage != null}">
@@ -184,8 +187,67 @@
             </div>
         </div>
 
+        <!-- Modal Import -->
+        <div class="modal fade" id="employeeImportModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content employee-modal import-modal">
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title mb-1">Thêm danh sách nhân viên</h5>
+                            <small class="text-muted">Tải file mẫu và nhập dữ liệu từ Excel.</small>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="employeeImportForm"
+                          th:action="@{/employees/import}"
+                          method="post"
+                          enctype="multipart/form-data"
+                          novalidate>
+                        <div class="modal-body">
+                            <input type="hidden" name="page" th:value="${pagination != null ? pagination.currentPage : 0}">
+                            <input type="hidden" name="size" th:value="${pagination != null ? pagination.size : 20}">
+
+                            <div class="alert alert-danger mb-3"
+                                 th:if="${importErrorMessage != null}"
+                                 th:text="${importErrorMessage}">Không thể nhập dữ liệu từ file đã chọn.</div>
+
+                            <div class="alert mb-3"
+                                 th:if="${importSummary != null}"
+                                 th:classappend="${importErrors != null and !#lists.isEmpty(importErrors)} ? ' alert-warning' : ' alert-success'">
+                                <div class="font-weight-bold" th:text="${importSummary}">Đã nhập 0 nhân viên.</div>
+                                <ul class="mb-0 mt-2 pl-3" th:if="${importErrors != null and !#lists.isEmpty(importErrors)}">
+                                    <li th:each="importError : ${importErrors}" th:text="${importError}">Dòng 4: Sai mã Phòng</li>
+                                </ul>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="importFile">File Excel</label>
+                                <input id="importFile" name="file" type="file" class="form-control-file" accept=".xlsx">
+                                <small class="form-text text-muted">Chỉ nhận file .xlsx theo đúng template danh sách nhân viên.</small>
+                                <small id="importFileError" class="form-error d-none"></small>
+                            </div>
+
+                            <div class="import-template-box d-flex flex-wrap align-items-center justify-content-between">
+                                <div>
+                                    <div class="font-weight-bold">File mẫu</div>
+                                    <div class="text-muted small">Nhấn tải xuống để dùng đúng cấu trúc cột nhập liệu.</div>
+                                </div>
+                                <a class="btn btn-outline-secondary btn-sm" th:href="@{/employees/import/template}">Tải file mẫu</a>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Hủy</button>
+                            <button id="employeeImportSubmitBtn" type="submit" class="btn btn-primary">Nhập dữ liệu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div id="employeeModalState"
-             th:attr="data-open-modal=${openEmployeeModal},data-modal-mode=${modalMode != null ? #strings.toLowerCase(modalMode.name()) : 'create'},data-form-action=${employeeFormAction}"></div>
+             th:attr="data-open-modal=${openEmployeeModal},data-open-import-modal=${openImportModal},data-modal-mode=${modalMode != null ? #strings.toLowerCase(modalMode.name()) : 'create'},data-form-action=${employeeFormAction}"></div>
     </div>
 </div>
 </html>

@@ -1,5 +1,5 @@
 body.auth-body {
-    background: linear-gradient(180deg, #f3f4f8 0%, #eef1f7 100%);
+    background: linear-gradient(180deg, #fff4f7 0%, #ffedf2 100%);
 }
 
 .auth-shell {
@@ -49,14 +49,23 @@ body.auth-body {
 }
 
 .auth-form .form-control:focus {
-    border-color: #34c38f;
-    box-shadow: 0 0 0 0.2rem rgba(52, 195, 143, 0.12);
+    border-color: #ee0033;
+    box-shadow: 0 0 0 0.2rem rgba(238, 0, 51, 0.12);
 }
 
 .auth-submit-btn {
     height: 46px;
     border-radius: 10px;
     font-weight: 600;
+    background: #ee0033;
+    border-color: #ee0033;
+}
+
+.auth-submit-btn:hover,
+.auth-submit-btn:focus,
+.auth-submit-btn:active {
+    background: #d4002d;
+    border-color: #d4002d;
 }
 
 .auth-help {

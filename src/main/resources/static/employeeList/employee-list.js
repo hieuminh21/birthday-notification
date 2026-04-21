@@ -1,10 +1,16 @@
 (function () {
     var modalElement = document.getElementById('employeeModal');
+    var importModalElement = document.getElementById('employeeImportModal');
     var stateElement = document.getElementById('employeeModalState');
     var formElement = document.getElementById('employeeForm');
+    var importFormElement = document.getElementById('employeeImportForm');
     var modalTitle = document.getElementById('employeeModalTitle');
     var submitButton = document.getElementById('employeeSubmitBtn');
     var createButton = document.getElementById('openCreateEmployeeModal');
+    var importButton = document.getElementById('openImportEmployeeModal');
+    var importFileInput = document.getElementById('importFile');
+    var importFileError = document.getElementById('importFileError');
+    var importSubmitButton = document.getElementById('employeeImportSubmitBtn');
     var pageToast = document.querySelector('.js-page-toast');
 
     if (!modalElement || !stateElement || !formElement) {
@@ -47,6 +53,31 @@
         removeBackdrop();
     }
 
+    function showImportModal() {
+        if (!importModalElement) {
+            return;
+        }
+        importModalElement.style.display = 'block';
+        importModalElement.classList.add('show');
+        importModalElement.setAttribute('aria-modal', 'true');
+        importModalElement.removeAttribute('aria-hidden');
+        document.body.classList.add('modal-open');
+        ensureBackdrop();
+    }
+
+    function hideImportModal() {
+        if (!importModalElement) {
+            return;
+        }
+        importModalElement.style.display = 'none';
+        importModalElement.classList.remove('show');
+        importModalElement.setAttribute('aria-hidden', 'true');
+        importModalElement.removeAttribute('aria-modal');
+        document.body.classList.remove('modal-open');
+        removeBackdrop();
+        resetImportForm();
+    }
+
     function setMode(mode, action) {
         var isUpdate = mode === 'update';
         formElement.setAttribute('action', action || '/employees');
@@ -66,11 +97,60 @@
         }
     }
 
+    function setImportFileError(message) {
+        if (!importFileError) {
+            return;
+        }
+        importFileError.textContent = message || '';
+        importFileError.style.display = message ? 'block' : 'none';
+        importFileError.classList.toggle('d-none', !message);
+    }
+
+    function resetImportForm() {
+        if (importFormElement) {
+            importFormElement.reset();
+        }
+        if (importFileInput) {
+            importFileInput.value = '';
+        }
+        setImportFileError('');
+        if (importSubmitButton) {
+            importSubmitButton.disabled = false;
+        }
+    }
+
+    function validateImportFile(file) {
+        if (!file) {
+            setImportFileError('Vui lòng chọn file Excel .xlsx.');
+            return false;
+        }
+
+        if (!/\.xlsx$/i.test(file.name || '')) {
+            setImportFileError('Chỉ hỗ trợ file .xlsx.');
+            return false;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            setImportFileError('File vượt quá dung lượng cho phép 10MB.');
+            return false;
+        }
+
+        setImportFileError('');
+        return true;
+    }
+
     if (createButton) {
         createButton.addEventListener('click', function () {
             setMode('create', '/employees');
             resetForm();
             showModal();
+        });
+    }
+
+    if (importButton) {
+        importButton.addEventListener('click', function () {
+            resetImportForm();
+            showImportModal();
         });
     }
 
@@ -120,6 +200,21 @@
         });
     });
 
+    if (importModalElement) {
+        var importDismissButtons = importModalElement.querySelectorAll('[data-dismiss="modal"]');
+        importDismissButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                hideImportModal();
+            });
+        });
+
+        importModalElement.addEventListener('click', function (event) {
+            if (event.target === importModalElement) {
+                hideImportModal();
+            }
+        });
+    }
+
     modalElement.addEventListener('click', function (event) {
         if (event.target === modalElement) {
             hideModal();
@@ -133,6 +228,35 @@
             stateElement.getAttribute('data-form-action') || '/employees'
         );
         showModal();
+    }
+
+    var shouldOpenImportModal = stateElement.getAttribute('data-open-import-modal') === 'true';
+    if (shouldOpenImportModal) {
+        showImportModal();
+    }
+
+    if (importFileInput) {
+        importFileInput.addEventListener('change', function () {
+            var file = importFileInput.files && importFileInput.files.length > 0 ? importFileInput.files[0] : null;
+            validateImportFile(file);
+        });
+    }
+
+    if (importFormElement) {
+        importFormElement.addEventListener('submit', function (event) {
+            var file = importFileInput && importFileInput.files && importFileInput.files.length > 0
+                ? importFileInput.files[0]
+                : null;
+
+            if (!validateImportFile(file)) {
+                event.preventDefault();
+                return;
+            }
+
+            if (importSubmitButton) {
+                importSubmitButton.disabled = true;
+            }
+        });
     }
 
     function showToast(toastElement) {
@@ -158,5 +282,4 @@
         }
     }
 })();
-
 

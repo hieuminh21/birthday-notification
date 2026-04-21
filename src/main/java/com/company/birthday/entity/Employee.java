@@ -31,7 +31,7 @@ public class Employee {
     @Column(name = "employeeid")
     private Integer employeeId;
 
-    @Column(name = "employeecode", nullable = false, unique = true, length = 50)
+    @Column(name = "employeecode", unique = true, length = 50)
     private String employeeCode;
 
     @Column(name = "fullname", nullable = false, length = 255)
@@ -43,7 +43,7 @@ public class Employee {
     @Column(name = "phonenumber", length = 20)
     private String phoneNumber;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", unique = true, length = 255)
     private String email;
 
     @Column(name = "dateofbirth", nullable = false)

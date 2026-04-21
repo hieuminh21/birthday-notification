@@ -1,5 +1,5 @@
 .setting-page {
-    background: linear-gradient(180deg, #f4f7fc 0%, #eef3fb 100%);
+    background: linear-gradient(180deg, #fff4f7 0%, #ffedf2 100%);
     border-radius: 18px;
     padding: 16px;
 }
@@ -85,8 +85,8 @@
 
 #saveSettingBtn {
     border-radius: 10px;
-    background: #2f67ff;
-    border-color: #2f67ff;
+    background: #ee0033;
+    border-color: #ee0033;
 }
 
 

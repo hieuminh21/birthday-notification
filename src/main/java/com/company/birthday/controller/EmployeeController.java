@@ -11,6 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.ui.Model;
@@ -19,6 +24,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class EmployeeController {
@@ -40,7 +51,12 @@ public class EmployeeController {
             Model model
     ) {
         loadEmployeePage(model, pageable);
-        model.addAttribute("openEmployeeModal", false);
+        if (!model.containsAttribute("openEmployeeModal")) {
+            model.addAttribute("openEmployeeModal", false);
+        }
+        if (!model.containsAttribute("openImportModal")) {
+            model.addAttribute("openImportModal", false);
+        }
         model.addAttribute("modalMode", ModalMode.CREATE);
         model.addAttribute("employeeFormAction", "/employees");
         model.addAttribute("employeeForm", new EmployeeFormRequest());
@@ -116,6 +132,52 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+    @PostMapping("/employees/import")
+    public String importEmployees(
+            @PageableDefault(sort = "employeeCode", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestParam("file") MultipartFile file,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            Map<String, Object> result = employeeService.importEmployee(file);
+            Integer successCount = ((Number) result.getOrDefault("success", 0)).intValue();
+            @SuppressWarnings("unchecked")
+            List<String> errors = (List<String>) result.getOrDefault("errors", List.of());
+
+            if (successCount > 0) {
+                redirectAttributes.addFlashAttribute("successMessage", "Đã nhập thành công " + successCount + " nhân viên.");
+            }
+
+            if (!errors.isEmpty()) {
+                redirectAttributes.addFlashAttribute("importSummary",
+                        "Đã nhập " + successCount + " nhân viên, có " + errors.size() + " dòng lỗi.");
+                redirectAttributes.addFlashAttribute("importErrors", errors);
+                redirectAttributes.addFlashAttribute("openImportModal", true);
+            }
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("openImportModal", true);
+            redirectAttributes.addFlashAttribute("importErrorMessage", ex.getMessage());
+        }
+
+        redirectAttributes.addAttribute("page", Math.max(pageable.getPageNumber(), 0));
+        redirectAttributes.addAttribute("size", Math.max(pageable.getPageSize(), 20));
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/employees/import/template")
+    public ResponseEntity<byte[]> downloadEmployeeTemplate() {
+        byte[] template = employeeService.downloadEmployeeTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDisposition(ContentDisposition.attachment()
+                .filename("ThemDanhSachNhanVien.xlsx", StandardCharsets.UTF_8)
+                .build());
+        headers.setContentLength(template.length);
+
+        return new ResponseEntity<>(template, headers, HttpStatus.OK);
+    }
+
     private void loadEmployeePage(Model model, Pageable pageable) {
         Page<EmployeeListResponse> employeePage = employeeService.getActiveEmployees(pageable);
 
@@ -128,6 +190,7 @@ public class EmployeeController {
     private String handleFormError(Model model, Pageable pageable, ModalMode mode, String formAction) {
         loadEmployeePage(model, pageable);
         model.addAttribute("openEmployeeModal", true);
+        model.addAttribute("openImportModal", false);
         model.addAttribute("modalMode", mode);
         model.addAttribute("employeeFormAction", formAction);
         return "employeeList/employee-list";

@@ -14,7 +14,6 @@ public class EmployeeFormRequest {
     @NotBlank(message = "Vui long nhap chuc danh.")
     private String jobTitle;
 
-    @NotBlank(message = "Vui long nhap ma nhan vien.")
     private String employeeCode;
 
     @NotBlank(message = "Vui long nhap ho va ten.")
@@ -27,7 +26,6 @@ public class EmployeeFormRequest {
     @NotBlank(message = "Vui long nhap so dien thoai.")
     private String phoneNumber;
 
-    @NotBlank(message = "Vui long nhap email.")
     @Email(message = "Email khong dung dinh dang.")
     private String email;
 

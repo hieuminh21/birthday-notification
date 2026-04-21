@@ -1,5 +1,5 @@
 .employee-page {
-    background: linear-gradient(180deg, #f4f7fc 0%, #eef3fb 100%);
+    background: linear-gradient(180deg, #fff4f7 0%, #ffedf2 100%);
     border-radius: 18px;
     padding: 16px;
 }
@@ -69,9 +69,23 @@
 }
 
 .employee-toolbar .btn-primary {
-    background: #2f67ff;
-    border-color: #2f67ff;
+    background: #ee0033;
+    border-color: #ee0033;
     border-radius: 10px;
+}
+
+.employee-toolbar .btn-outline-primary {
+    border-radius: 10px;
+}
+
+.employee-actions {
+    gap: 8px;
+}
+
+.employee-import-alert {
+    margin: 18px 24px 0;
+    border-radius: 12px;
+    border: 1px solid #ffd4de;
 }
 
 .employee-table thead th {
@@ -153,6 +167,10 @@
     overflow: hidden;
 }
 
+.import-modal .modal-body {
+    background: #fafcff;
+}
+
 .employee-modal .modal-header {
     border-bottom: 1px solid #edf2fa;
 }
@@ -166,8 +184,8 @@
 }
 
 .employee-modal .btn-primary {
-    background: #2f67ff;
-    border-color: #2f67ff;
+    background: #ee0033;
+    border-color: #ee0033;
 }
 
 .employee-modal .btn-light {
@@ -182,6 +200,22 @@
     font-size: 0.78rem;
 }
 
+.import-template-box {
+    border: 1px dashed #ffb7c7;
+    border-radius: 12px;
+    background: #fff6f8;
+    padding: 14px 16px;
+    gap: 12px;
+}
+
+#importFileError {
+    display: none;
+}
+
+.import-template-box .btn {
+    white-space: nowrap;
+}
+
 @media (max-width: 992px) {
     .employee-page {
         padding: 12px;
@@ -190,5 +224,10 @@
     .employee-toolbar {
         gap: 12px;
         padding: 16px;
+    }
+
+    .employee-import-alert {
+        margin-left: 16px;
+        margin-right: 16px;
     }
 }
