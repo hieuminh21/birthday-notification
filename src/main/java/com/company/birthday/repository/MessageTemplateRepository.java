@@ -17,13 +17,10 @@ public interface MessageTemplateRepository extends JpaRepository<MessageTemplate
 
     List<MessageTemplate> findByType(MessageTemplateType type);
 
-    List<MessageTemplate> findByTypeAndIsActiveTrue(MessageTemplateType type);
-
     Optional<MessageTemplate> findByTypeAndIsDefaultTrue(MessageTemplateType type);
 
     Optional<MessageTemplate> findByName(String name);
 
-    boolean existsByName(String name);
 
     boolean existsByNameIgnoreCase(String name);
 

@@ -22,8 +22,6 @@ public class BirthdayServiceImpl implements BirthdayService {
 
     @Override
     public void handleTodayBirthday(Integer messageTemplateId) {
-        // TODO: Add audit/logging + retry policy around outgoing WhatsApp sends.
-        // TODO: Validate incoming messageTemplateId against business rules if needed.
         List<Employee> list = employeeRepository.findByTodayBirthday();
 
         for (Employee e : list) {

@@ -1,6 +1,5 @@
 package com.company.birthday.service.impl;
 
-import com.company.birthday.service.MessageComposerService;
 import com.company.birthday.service.EmailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,27 +10,23 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
-    private final MessageComposerService messageComposerService;
     private final String defaultSubject;
     private final String fromAddress;
 
     public EmailServiceImpl(JavaMailSender mailSender,
-                            MessageComposerService messageComposerService,
                             @Value("${birthday.notification.email.subject:Chuc mung sinh nhat}") String defaultSubject,
                             @Value("${spring.mail.username:}") String fromAddress) {
         this.mailSender = mailSender;
-        this.messageComposerService = messageComposerService;
         this.defaultSubject = defaultSubject;
         this.fromAddress = fromAddress;
     }
 
     @Override
-    public void sendBirthdayMessage(String to, String fullName, String jobTitle, Integer messageId) {
-        if (to == null || to.isBlank()) {
+    public void sendBirthdayMessage(String to, String body) {
+        if (to == null || to.isBlank() || body == null || body.isBlank()) {
             return;
         }
 
-        String body = messageComposerService.composeBirthdayMessage(messageId, fullName, jobTitle);
 
         SimpleMailMessage mail = new SimpleMailMessage();
         if (fromAddress != null && !fromAddress.isBlank()) {
