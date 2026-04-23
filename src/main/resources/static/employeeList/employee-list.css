@@ -88,6 +88,89 @@
     border: 1px solid #ffd4de;
 }
 
+.birthday-notice-wrap {
+    margin: 18px 24px 30px;
+    border: 1px solid #e5e7eb;
+    border-top: 4px solid #dc3545;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 10px 26px rgba(17, 24, 39, 0.06);
+}
+
+.birthday-notice-header {
+    padding: 16px 18px 14px;
+    background: #ffffff;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.birthday-notice-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #fff1f2;
+    color: #dc3545;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    font-size: 1.1rem;
+}
+
+.birthday-notice-kicker {
+    color: #dc3545;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.birthday-notice-legend .badge {
+    min-width: 0;
+    font-weight: 700;
+}
+
+.birthday-notice-table-wrap {
+    background: #ffffff;
+}
+
+.birthday-notice-table {
+    color: #111111;
+}
+
+.birthday-notice-table th,
+.birthday-notice-table td {
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+
+.birthday-notice-table thead th {
+    border-top: 0;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111111;
+    background: #ffffff;
+    white-space: nowrap;
+}
+
+.birthday-notice-table tbody td {
+    border-top: 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+    color: #111111;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.birthday-notice-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.birthday-notice-table tbody tr:hover {
+    background: #fff5f7;
+}
+
 .employee-table thead th {
     border-top: 0;
     border-bottom: 1px solid #e7edf6;
@@ -227,6 +310,11 @@
     }
 
     .employee-import-alert {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .birthday-notice-wrap {
         margin-left: 16px;
         margin-right: 16px;
     }

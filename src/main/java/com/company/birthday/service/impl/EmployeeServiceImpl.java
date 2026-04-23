@@ -2,6 +2,7 @@ package com.company.birthday.service.impl;
 
 import com.company.birthday.dto.request.EmployeeFormRequest;
 import com.company.birthday.dto.response.EmployeeListResponse;
+import com.company.birthday.dto.response.UpcomingBirthdayResponse;
 import com.company.birthday.entity.Department;
 import com.company.birthday.entity.Employee;
 import com.company.birthday.repository.DepartmentRepository;
@@ -25,7 +26,10 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,6 +69,45 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Department> getAllDepartments() {
 		return departmentRepository.findAllDepartment();
+	}
+
+	@Override
+	public List<UpcomingBirthdayResponse> getUpcomingBirthdays() {
+		LocalDate today = LocalDate.now();
+		LocalDate endDate = today.plusDays(7);
+		boolean sameMonth = today.getYear() == endDate.getYear() && today.getMonthValue() == endDate.getMonthValue();
+		boolean wrapped = endDate.getYear() > today.getYear();
+
+		List<Employee> employees = employeeRepository.findUpcomingBirthdaysRaw(
+				today.getMonthValue(),
+				today.getDayOfMonth(),
+				endDate.getMonthValue(),
+				endDate.getDayOfMonth(),
+				sameMonth,
+				wrapped
+		);
+
+		List<UpcomingBirthdayItem> items = employees.stream()
+				.map(employee -> toUpcomingBirthdayItem(employee, today))
+				.filter(item -> item.daysUntil >= 0 && item.daysUntil <= 7)
+				.sorted(Comparator
+						.comparingLong((UpcomingBirthdayItem item) -> item.daysUntil)
+						.thenComparing(item -> item.response.fullName(), String.CASE_INSENSITIVE_ORDER))
+				.toList();
+
+		List<UpcomingBirthdayResponse> responses = new ArrayList<>(items.size());
+		for (int i = 0; i < items.size(); i++) {
+			UpcomingBirthdayResponse response = items.get(i).response;
+			responses.add(new UpcomingBirthdayResponse(
+					i + 1,
+					response.title(),
+					response.fullName(),
+					response.dateOfBirth(),
+					response.status()
+			));
+		}
+
+		return responses;
 	}
 
 	@Override
@@ -369,6 +412,40 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (duplicateEmail) {
 			throw new DuplicateFieldException("email", "Email da ton tai.");
 		}
+	}
+
+	private UpcomingBirthdayItem toUpcomingBirthdayItem(Employee employee, LocalDate today) {
+		LocalDate nextBirthday = resolveBirthdayInYear(employee.getBirthMonth(), employee.getBirthDay(), today.getYear());
+		if (nextBirthday.isBefore(today)) {
+			nextBirthday = resolveBirthdayInYear(employee.getBirthMonth(), employee.getBirthDay(), today.getYear() + 1);
+		}
+
+		long daysUntil = ChronoUnit.DAYS.between(today, nextBirthday);
+		String status = daysUntil == 0 ? "Hôm nay" : daysUntil + " ngày tới";
+
+		UpcomingBirthdayResponse response = new UpcomingBirthdayResponse(
+				0,
+				valueOrEmpty(employee.getJobTitle()),
+				valueOrEmpty(employee.getFullName()),
+				employee.getDateOfBirth(),
+				status
+		);
+
+		return new UpcomingBirthdayItem(response, daysUntil);
+	}
+
+	private LocalDate resolveBirthdayInYear(Integer month, Integer day, int year) {
+		int safeMonth = month == null ? 1 : month;
+		int safeDay = day == null ? 1 : day;
+		int maxDay = YearMonth.of(year, safeMonth).lengthOfMonth();
+		return LocalDate.of(year, safeMonth, Math.min(safeDay, maxDay));
+	}
+
+	private String valueOrEmpty(String value) {
+		return value == null ? "" : value;
+	}
+
+	private record UpcomingBirthdayItem(UpcomingBirthdayResponse response, long daysUntil) {
 	}
 
 }

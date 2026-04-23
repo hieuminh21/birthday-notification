@@ -12,9 +12,83 @@
     var importFileError = document.getElementById('importFileError');
     var importSubmitButton = document.getElementById('employeeImportSubmitBtn');
     var pageToast = document.querySelector('.js-page-toast');
+    var upcomingBirthdayBlock = document.getElementById('upcomingBirthdayBlock');
+    var upcomingBirthdayBody = document.getElementById('upcomingBirthdayBody');
 
     if (!modalElement || !stateElement || !formElement) {
         return;
+    }
+
+    function formatBirthDate(dateText) {
+        if (!dateText) {
+            return '';
+        }
+        var parts = String(dateText).split('-');
+        if (parts.length !== 3) {
+            return dateText;
+        }
+        return parts[2] + '/' + parts[1];
+    }
+
+    function escapeHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function renderUpcomingBirthdays(items) {
+        if (!upcomingBirthdayBlock || !upcomingBirthdayBody) {
+            return;
+        }
+
+        if (!items || items.length === 0) {
+            upcomingBirthdayBody.innerHTML = '';
+            upcomingBirthdayBlock.classList.add('d-none');
+            return;
+        }
+
+        upcomingBirthdayBody.innerHTML = items.map(function (item) {
+            var status = item.status || '';
+            var isToday = status === 'Hôm nay';
+            var statusHtml = isToday
+                ? '<span class="badge badge-danger badge-pill px-3 py-2"><i class="bi bi-cake2-fill mr-1" aria-hidden="true"></i>' + escapeHtml(status || 'Hôm nay') + '</span>'
+                : '<span class="badge badge-light badge-pill text-dark border px-3 py-2">' + escapeHtml(status) + '</span>';
+            return '<tr>' +
+                '<td>' + escapeHtml(item.index || '') + '</td>' +
+                '<td>' + escapeHtml(item.title || '') + '</td>' +
+                '<td class="font-weight-bold">' + escapeHtml(item.fullName || '') + '</td>' +
+                '<td>' + escapeHtml(formatBirthDate(item.dateOfBirth)) + '</td>' +
+                '<td>' + statusHtml + '</td>' +
+                '</tr>';
+        }).join('');
+        upcomingBirthdayBlock.classList.remove('d-none');
+    }
+
+    function loadUpcomingBirthdays() {
+        if (!upcomingBirthdayBlock || !upcomingBirthdayBody || !window.fetch) {
+            return;
+        }
+
+        window.fetch('/employees/upcoming-birthdays', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Cannot load upcoming birthdays');
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                renderUpcomingBirthdays(Array.isArray(data) ? data : []);
+            })
+            .catch(function () {
+                upcomingBirthdayBlock.classList.add('d-none');
+            });
     }
 
     function ensureBackdrop() {
@@ -281,5 +355,7 @@
             });
         }
     }
+
+    loadUpcomingBirthdays();
 })();
 

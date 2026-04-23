@@ -3,6 +3,7 @@ package com.company.birthday.controller;
 import com.company.birthday.dto.request.EmployeeFormRequest;
 import com.company.birthday.dto.response.EmployeeListResponse;
 import com.company.birthday.dto.response.PaginationView;
+import com.company.birthday.dto.response.UpcomingBirthdayResponse;
 import com.company.birthday.service.EmployeeService;
 import com.company.birthday.service.exception.DuplicateFieldException;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
@@ -61,6 +63,12 @@ public class EmployeeController {
         model.addAttribute("employeeFormAction", "/employees");
         model.addAttribute("employeeForm", new EmployeeFormRequest());
         return "employeeList/employee-list";
+    }
+
+    @GetMapping("/employees/upcoming-birthdays")
+    @ResponseBody
+    public List<UpcomingBirthdayResponse> getUpcomingBirthdays() {
+        return employeeService.getUpcomingBirthdays();
     }
 
     @PostMapping("/employees")
